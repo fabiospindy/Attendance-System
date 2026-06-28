@@ -1,0 +1,12 @@
+﻿venv/
+__pycache__/
+*.pyc
+database/attendance.db
+dataset/
+trainer/trainer.yml
+trainer/label_map.json
+*.jpg
+*.png
+debug_frame.jpg
+fix_*.py
+.env

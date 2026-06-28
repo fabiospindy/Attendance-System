@@ -1,0 +1,57 @@
+{% extends "lecturer_base.html" %}
+{% block title %}Sessions — Attendance System{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Sessions</h1><p class="page-sub">All your attendance sessions</p></div>
+  <a href="{{ url_for('lecturer_dashboard') }}" class="btn-primary btn-blue">+ New session</a>
+</div>
+
+<div class="section-card">
+  {% if sessions %}
+  <table class="data-table">
+    <thead><tr><th>Course</th><th>Date</th><th>Token</th><th>Students</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody>
+      {% for s in sessions %}
+      <tr>
+        <td><strong>{{ s.course }}</strong></td>
+        <td>{{ s.date }}</td>
+        <td><a href="{{ request.host_url }}student/join/{{ s.token }}" target="_blank" rel="noopener"><code class="mono">{{ s.token }}</code></a></td>
+        <td>{{ s.attendance_count }}</td>
+        <td>
+          {% if s.active %}
+            <span class="badge b-green">● Live</span>
+          {% else %}
+            <span class="badge b-gray">Ended</span>
+          {% endif %}
+        </td>
+        <td>
+          <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+            {% if s.active %}
+            <button class="btn-outline btn-sm" onclick="copyToken('{{ request.host_url }}student/join/{{ s.token }}')">Copy link</button>
+            {% else %}
+            <span style="color:#6b7280;font-size:13px">No live link</span>
+            {% endif %}
+            {% if s.attendance_count > 0 %}
+            <a href="{{ url_for('download_session_attendance', session_id=s.id) }}" class="btn-outline btn-sm">Export</a>
+            {% else %}
+            <span style="color:#6b7280;font-size:13px">No attendance</span>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <p>No sessions yet. Create one from the dashboard.</p>
+    <a href="{{ url_for('lecturer_dashboard') }}" class="btn-primary btn-blue">Go to dashboard</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function copyToken(link) { navigator.clipboard.writeText(link); alert('Link copied!'); }
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body_class %}auth-body{% endblock %}
+{% block body %}
+<div class="auth-wrap d-flex align-items-center justify-content-center min-vh-100">
+  <a href="{{ url_for('index') }}" class="auth-brand">
+    <div class="brand-icon brand-icon-sm">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    </div>
+    Attendance System
+  </a>
+  <div class="auth-card">
+    {% block auth_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

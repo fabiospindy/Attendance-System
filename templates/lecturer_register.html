@@ -1,0 +1,67 @@
+{% extends "lecturer_base.html" %}
+{% block title %}Register Student — Attendance System{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Register student</h1><p class="page-sub">Manually register and capture face samples for a student</p></div>
+</div>
+<div class="two-col">
+  <div>
+    <div class="section-card">
+      <h2>Student details</h2>
+      <div class="field-group"><label>Student ID</label><input type="text" id="student_id" placeholder="e.g. STU001"></div>
+      <div class="field-group"><label>Full name</label><input type="text" id="name" placeholder="e.g. Amara Osei"></div>
+      <div class="field-group"><label>Department</label><input type="text" id="department" placeholder="e.g. Computer Science"></div>
+      <button class="btn-primary btn-blue" onclick="registerStudent()">Save student</button>
+      <div class="msg" id="reg-msg" style="margin-top:10px"></div>
+    </div>
+    <div class="section-card" style="margin-top:1rem">
+      <h2>Registered students</h2>
+      {% if students %}
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Department</th><th>Samples</th></tr></thead>
+        <tbody>
+          {% for s in students %}
+          <tr>
+            <td class="mono">{{ s.student_id }}</td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.department or '—' }}</td>
+            <td>{{ s.samples }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}<p class="muted">No students registered yet.</p>{% endif %}
+    </div>
+  </div>
+  <div>
+    <div class="section-card">
+      <h2>Face capture</h2>
+      <p class="muted" style="margin-bottom:1rem">Save the student first, then capture 30+ samples.</p>
+      <div class="webcam-wrap">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="canvas" style="display:none"></canvas>
+        <div class="cam-overlay" id="cam-overlay">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <p>Camera not started</p>
+        </div>
+      </div>
+      <div class="capture-controls">
+        <button class="btn-outline" onclick="startCamera()">Start camera</button>
+        <button class="btn-outline" onclick="stopCamera()">Stop</button>
+      </div>
+      <div class="prog-wrap" style="margin-top:1rem">
+        <div class="prog-lbl"><span>Samples captured</span><span id="count-display">0 / 30</span></div>
+        <div class="prog-bg"><div class="prog-fill" id="prog-fill"></div></div>
+      </div>
+      <button class="btn-primary btn-blue btn-full" style="margin-top:1rem" onclick="startAutoCapture()" id="capture-btn">Auto-capture (30 samples)</button>
+      <div class="msg" id="cap-msg" style="margin-top:8px"></div>
+      <hr>
+      <h3 style="font-size:14px;margin-bottom:0.5rem">Train model</h3>
+      <p class="muted" style="margin-bottom:0.75rem">Run after capturing all students' faces.</p>
+      <button class="btn-outline btn-full" onclick="trainModel()" id="train-btn">Train LBPH model</button>
+      <div class="msg" id="train-msg" style="margin-top:8px"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/register.js') }}"></script>{% endblock %}

@@ -1,0 +1,142 @@
+{% extends "lecturer_base.html" %}
+{% block title %}Dashboard — Attendance System{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Welcome back, {{ session.lecturer_name.split()[0] }}</h1>
+    <p class="page-sub">Here's what's happening with your attendance sessions</p>
+  </div>
+  <button class="btn-primary btn-blue" onclick="openCreateSession()">+ New session</button>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon si-blue">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    </div>
+    <div><div class="stat-lbl">Total students</div><div class="stat-val">{{ total_students }}</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon si-purple">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <div><div class="stat-lbl">Total sessions</div><div class="stat-val">{{ total_sessions }}</div></div>
+  </div>
+  {% if active_session %}
+  <div class="stat-card stat-card-live">
+    <div class="stat-icon si-green">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div>
+      <div class="stat-lbl">Live session</div>
+      <div class="stat-val" style="font-size:16px">{{ active_session.course }}</div>
+      <div style="font-size:11px;color:#27500a;margin-top:2px">Token: <strong>{{ active_session.token }}</strong></div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% if active_session %}
+<div class="section-card" style="margin-bottom:1rem;border-color:#c6e6b0">
+  <div class="section-header">
+    <div>
+      <h2 style="margin:0">Active session: {{ active_session.course }}</h2>
+      <p class="page-sub" style="margin:4px 0 0">Share this link with students to mark attendance</p>
+    </div>
+    <button class="btn-outline btn-red" onclick="endSession({{ active_session.id }})">End session</button>
+  </div>
+  <div class="session-link-box">
+    <a id="session-link" href="{{ request.host_url }}student/join/{{ active_session.token }}" target="_blank" rel="noopener">{{ request.host_url }}student/join/{{ active_session.token }}</a>
+    <button class="btn-outline" onclick="copyLink()">Copy link</button>
+  </div>
+</div>
+{% endif %}
+
+<div class="section-card">
+  <div class="section-header"><h2>Recent attendance</h2></div>
+  {% if recent %}
+  <table class="data-table">
+    <thead><tr><th>Student ID</th><th>Name</th><th>Course</th><th>Date</th><th>Time</th><th>Confidence</th></tr></thead>
+    <tbody>
+      {% for row in recent %}
+      <tr>
+        <td class="mono">{{ row.student_id }}</td>
+        <td>{{ row.name }}</td>
+        <td>{{ row.course }}</td>
+        <td>{{ row.date }}</td>
+        <td>{{ row.time }}</td>
+        <td><span class="badge b-green">{{ "%.1f"|format(row.confidence) }}%</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <p>No attendance records yet. Create a session to get started.</p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Create session modal -->
+<div class="modal-backdrop" id="modal" style="display:none" onclick="closeModal(event)">
+  <div class="modal-card">
+    <h2>Create attendance session</h2>
+    <p class="page-sub" style="margin-bottom:1rem">Students will join via a shareable link</p>
+    <div class="field-group"><label>Course name</label>
+      <input type="text" id="course-input" placeholder="e.g. Introduction to AI" autofocus></div>
+    <button class="btn-primary btn-blue btn-full" onclick="createSession()">Create session</button>
+    <div class="msg" id="modal-msg" style="margin-top:8px"></div>
+    <div id="session-result" style="display:none;margin-top:1rem">
+      <div class="session-link-box">
+        <code id="new-session-link"></code>
+        <button class="btn-outline" onclick="copyNewLink()">Copy</button>
+      </div>
+      <p class="muted" style="margin-top:8px;font-size:12px">Share this link with your students.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openCreateSession() {
+  document.getElementById('modal').style.display = 'flex';
+  document.getElementById('course-input').focus();
+}
+function closeModal(e) {
+  if (e.target.id === 'modal') document.getElementById('modal').style.display = 'none';
+}
+async function createSession() {
+  const course = document.getElementById('course-input').value.trim();
+  if (!course) return;
+  const res  = await fetch('/api/lecturer/session/create', {
+    method:'POST', headers:{'Content-Type':'application/json','X-CSRFToken': window.getCsrfToken()},
+    body: JSON.stringify({course})
+  });
+  const data = await res.json();
+  const msg  = document.getElementById('modal-msg');
+  msg.textContent = data.message;
+  msg.className   = 'msg ' + (data.success ? 'ok' : 'err');
+  if (data.success) {
+    document.getElementById('session-result').style.display = 'block';
+    document.getElementById('new-session-link').textContent = data.link;
+    setTimeout(() => location.reload(), 2500);
+  }
+}
+function copyLink() {
+  navigator.clipboard.writeText(document.getElementById('session-link').textContent);
+}
+function copyNewLink() {
+  navigator.clipboard.writeText(document.getElementById('new-session-link').textContent);
+}
+async function endSession(id) {
+  if (!confirm('End this session?')) return;
+  await fetch('/api/lecturer/session/end', {
+    method:'POST', headers:{'Content-Type':'application/json','X-CSRFToken': window.getCsrfToken()},
+    body: JSON.stringify({session_id: id})
+  });
+  location.reload();
+}
+</script>
+{% endblock %}

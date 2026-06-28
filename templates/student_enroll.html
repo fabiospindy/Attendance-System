@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Face Enrollment — Attendance System{% endblock %}
+{% block body_class %}auth-body{% endblock %}
+{% block body %}
+<div class="auth-wrap" style="max-width:500px">
+  <a href="{{ url_for('index') }}" class="auth-brand">
+    <div class="brand-icon brand-icon-sm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+    Attendance System
+  </a>
+  <div class="auth-card">
+    <div class="auth-icon auth-icon-green">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
+      </svg>
+    </div>
+    <h1 class="auth-title">Enroll your face</h1>
+    <p class="auth-sub">We need 30 face samples to recognise you during attendance</p>
+
+    <div class="webcam-wrap" style="margin-bottom:1rem">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="canvas" style="display:none"></canvas>
+      <div class="cam-overlay" id="cam-overlay">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <p>Camera not started</p>
+      </div>
+    </div>
+    <div class="capture-controls" style="margin-bottom:1rem">
+      <button class="btn-outline" onclick="startCamera()">Start camera</button>
+      <button class="btn-outline" onclick="stopCamera()">Stop</button>
+    </div>
+    <div class="prog-wrap" style="margin-bottom:1rem">
+      <div class="prog-lbl"><span>Samples captured</span><span id="count-display">0 / 30</span></div>
+      <div class="prog-bg"><div class="prog-fill prog-fill-green" id="prog-fill"></div></div>
+    </div>
+    <button class="btn-primary btn-green btn-full" onclick="startAutoCapture()" id="capture-btn">Start face enrollment</button>
+    <div class="msg" id="cap-msg" style="margin-top:10px"></div>
+    <button onclick="clearSamples()" class="btn-outline btn-full" style="margin-top:0.5rem;border-color:#dc2626;color:#dc2626">Clear face samples and re-enroll</button>
+    <script>
+    async function clearSamples() {
+      if (!confirm("Delete all face samples and start fresh?")) return;
+      const res = await fetch("/api/student/clear-samples", {
+        method: "POST",
+        headers: {"Content-Type": "application/json", "X-CSRFToken": getCsrfToken()}
+      });
+      const data = await res.json();
+      if (data.success) { alert("Samples cleared! Now re-enroll your face."); location.reload(); }
+    }
+    </script>
+    <a href="{{ url_for('student_dashboard') }}" class="auth-footer" style="display:block;text-align:center;margin-top:1rem">Skip for now</a>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/student_enroll.js') }}"></script>{% endblock %}

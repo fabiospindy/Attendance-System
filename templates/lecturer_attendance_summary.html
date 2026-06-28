@@ -1,0 +1,44 @@
+{% extends "lecturer_base.html" %}
+{% block title %}Attendance Summary — Attendance System{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Attendance summary</h1>
+    <p class="page-sub">Download attendance percentages for students in your sessions.</p>
+  </div>
+  <a href="{{ url_for('download_attendance_summary') }}" class="btn-primary btn-blue">Download CSV</a>
+</div>
+
+<div class="section-card">
+  {% if summary %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Course</th>
+        <th>Attended</th>
+        <th>Total Sessions</th>
+        <th>Attendance %</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in summary %}
+      <tr>
+        <td class="mono">{{ row.student_id }}</td>
+        <td>{{ row.name }}</td>
+        <td>{{ row.course }}</td>
+        <td>{{ row.attended_sessions }}</td>
+        <td>{{ row.total_sessions }}</td>
+        <td><span class="badge b-green">{{ '%.1f'|format(row.attendance_percent) }}%</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <p>No attendance summary available yet. Create sessions and let students check in first.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

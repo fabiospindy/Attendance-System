@@ -1,0 +1,10 @@
+{% extends "auth_base.html" %}
+{% block title %}Error — Attendance System{% endblock %}
+{% block auth_content %}
+<div class="auth-icon" style="background:#fcebeb;color:#791f1f">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+</div>
+<h1 class="auth-title">Something went wrong</h1>
+<p class="auth-sub">{{ message }}</p>
+<a href="{{ url_for('index') }}" class="btn-primary btn-full" style="margin-top:1rem;display:flex;justify-content:center">Go home</a>
+{% endblock %}

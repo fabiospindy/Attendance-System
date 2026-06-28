@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block body_class %}app-body{% endblock %}
+{% block body %}
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon brand-icon-sm">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+      </svg>
+    </div>
+    <span>Attendance System</span>
+  </div>
+  <div class="sidebar-role">Lecturer</div>
+  <ul class="nav-links">
+    <li><a href="{{ url_for('lecturer_dashboard') }}" class="{% if request.endpoint=='lecturer_dashboard' %}active{% endif %}">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a></li>
+    <li><a href="{{ url_for('lecturer_sessions') }}" class="{% if request.endpoint=='lecturer_sessions' %}active{% endif %}">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Sessions
+    </a></li>
+    <li><a href="{{ url_for('lecturer_attendance_summary') }}" class="{% if request.endpoint=='lecturer_attendance_summary' %}active{% endif %}">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+      Attendance summary
+    </a></li>
+    <li><a href="{{ url_for('lecturer_register') }}" class="{% if request.endpoint=='lecturer_register' %}active{% endif %}">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/><line x1="19" y1="8" x2="23" y2="8"/><line x1="21" y1="6" x2="21" y2="10"/></svg>
+      Register student
+    </a></li>
+  </ul>
+  <div class="sidebar-user">
+    <div class="sidebar-avatar">{{ session.lecturer_name[0] | upper }}</div>
+    <div class="sidebar-uinfo">
+      <div class="sidebar-uname">{{ session.lecturer_name }}</div>
+      <a href="{{ url_for('lecturer_logout') }}" class="sidebar-logout">Sign out</a>
+    </div>
+  </div>
+</nav>
+<main class="main-content">
+  {% block content %}{% endblock %}
+</main>
+{% block scripts %}{% endblock %}
+{% endblock %}

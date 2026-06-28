@@ -1,0 +1,30 @@
+{% extends "auth_base.html" %}
+{% block title %}Lecturer Sign Up — Attendance System{% endblock %}
+{% block auth_content %}
+<div class="auth-icon auth-icon-blue">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+    <line x1="19" y1="8" x2="23" y2="8"/><line x1="21" y1="6" x2="21" y2="10"/>
+  </svg>
+</div>
+<h1 class="auth-title">Create lecturer account</h1>
+<p class="auth-sub">Set up your Attendance System account</p>
+
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+
+<form method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="field-group"><label>Full name</label>
+    <input type="text" name="name" placeholder="Dr. Jane Smith" required autofocus></div>
+  <div class="field-group"><label>Email address</label>
+    <input type="email" name="email" placeholder="you@university.edu" required></div>
+  <div class="field-group"><label>Password</label>
+    <input type="password" name="password" placeholder="At least 6 characters" required></div>
+  <div class="field-group"><label>Confirm password</label>
+    <input type="password" name="confirm_password" placeholder="••••••••" required></div>
+  <button type="submit" class="btn-primary btn-full btn-blue">Create account</button>
+</form>
+<div class="auth-footer">
+  <a href="{{ url_for('lecturer_login') }}">Already have an account? Sign in</a>
+</div>
+{% endblock %}

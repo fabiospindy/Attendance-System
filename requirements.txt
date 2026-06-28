@@ -1,0 +1,5 @@
+flask>=3.0.0
+flask-wtf>=1.0.0
+opencv-contrib-python>=4.9.0
+numpy>=1.26.0
+Pillow>=10.2.0

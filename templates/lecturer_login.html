@@ -1,0 +1,31 @@
+{% extends "auth_base.html" %}
+{% block title %}Lecturer Login — Attendance System{% endblock %}
+{% block auth_content %}
+<div class="auth-icon auth-icon-blue">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+  </svg>
+</div>
+<h1 class="auth-title">Lecturer login</h1>
+<p class="auth-sub">Sign in to your account</p>
+
+{% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+
+<form method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="field-group"><label>Email address</label>
+    <input type="email" name="email" placeholder="you@university.edu" required autofocus></div>
+  <div class="field-group"><label>Password</label>
+    <input type="password" name="password" placeholder="••••••••" required></div>
+  <button type="submit" class="btn-primary btn-full btn-blue">Sign in</button>
+</form>
+
+<div class="auth-footer">
+  <a href="{{ url_for('lecturer_signup') }}">Don't have an account? Sign up</a>
+</div>
+<div class="auth-hints">
+  <div class="hint-row">· Session expires after 30 min inactivity</div>
+  <div class="hint-row">· Locks after 3 failed attempts</div>
+</div>
+{% endblock %}

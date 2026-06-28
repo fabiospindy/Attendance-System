@@ -1,0 +1,26 @@
+{% extends "auth_base.html" %}
+{% block title %}Student Login — Attendance System{% endblock %}
+{% block auth_content %}
+<div class="auth-icon auth-icon-green">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+  </svg>
+</div>
+<h1 class="auth-title">Student login</h1>
+<p class="auth-sub">Sign in to your student account</p>
+
+{% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+
+<form method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="next" value="{{ next }}">
+  <div class="field-group"><label>Student ID</label>
+    <input type="text" name="student_id" placeholder="e.g. STU001" required autofocus></div>
+  <div class="field-group"><label>Password</label>
+    <input type="password" name="password" placeholder="••••••••" required></div>
+  <button type="submit" class="btn-primary btn-full btn-green">Sign in</button>
+</form>
+<div class="auth-footer">
+  <a href="{{ url_for('student_register') }}">New student? Register here</a>
+</div>
+{% endblock %}
