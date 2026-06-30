@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% block title %}Portals — Attendance System{% endblock %}
 {% block body_class %}landing-body{% endblock %}
 
@@ -8,14 +8,16 @@
 <header class="lp-nav">
   <div class="lp-nav-inner">
     <a href="{{ url_for('index') }}" class="lp-logo">
-      <div class="lp-logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <rect x="1" y="4" width="14" height="14" rx="2"/>
-          <circle cx="8" cy="8" r="2" fill="currentColor" stroke="none"/>
-          <path d="M17 8l4 4-4 4" stroke-width="2"/>
-          <path d="M9 15c1.5 2 4 2.5 6 1"/>
-        </svg>
-      </div>
+      <svg width="34" height="34" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="34,74 34,34 74,34" fill="none" stroke="#3b5fe0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="206,34 246,34 246,74" fill="none" stroke="#3b5fe0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="34,206 34,246 74,246" fill="none" stroke="#3b5fe0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="246,206 246,246 206,246" fill="none" stroke="#3b5fe0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="116" cy="113" r="9" fill="#3b5fe0" opacity="0.85"/>
+        <circle cx="164" cy="113" r="9" fill="#3b5fe0" opacity="0.85"/>
+        <circle cx="222" cy="52" r="26" fill="#059669"/>
+        <polyline points="210,52 219,62 235,40" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
       <span>Attendance System</span>
     </a>
     <nav class="lp-nav-links">
@@ -69,7 +71,7 @@
           </svg>
         </div>
         <h3>Student Portal</h3>
-        <p>First-time? Enroll your face. Already registered? Join a session via link.</p>
+        <p>First-time? Enroll your face. Already registered? Join attendance using session link shared by your lecturer.</p>
         <ul class="lp-feature-list">
           <li>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -95,12 +97,15 @@
 <footer class="lp-footer">
   <div class="lp-footer-inner">
     <div class="lp-logo" style="margin-bottom:0">
-      <div class="lp-logo-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-        </svg>
-      </div>
-      <span>AttendanceIQ</span>
+      <svg width="18" height="18" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="34,74 34,34 74,34" fill="none" stroke="#3b5fe0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="206,34 246,34 246,74" fill="none" stroke="#3b5fe0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="34,206 34,246 74,246" fill="none" stroke="#3b5fe0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="246,206 246,246 206,246" fill="none" stroke="#3b5fe0" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="116" cy="113" r="9" fill="#3b5fe0" opacity="0.85"/>
+        <circle cx="164" cy="113" r="9" fill="#3b5fe0" opacity="0.85"/>
+      </svg>
+      <span>Attendance System</span>
     </div>
     <p class="lp-footer-copy">Built with Flask · OpenCV · LBPH Face Recognition · <a href="{{ url_for('help_support') }}">Help & Support</a></p>
   </div>
