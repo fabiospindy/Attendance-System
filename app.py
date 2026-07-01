@@ -105,6 +105,10 @@ def set_security_headers(response):
     response.headers['X-XSS-Protection'] = '1; mode=block'
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy'] = 'geolocation=(), microphone=()'
+    if request.path.startswith('/student') or request.path.startswith('/lecturer') or request.path.startswith('/api'):
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
     csp = (
         "default-src 'self'; "
         "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
@@ -216,8 +220,7 @@ def lecturer_login():
 
 @app.route('/lecturer/logout')
 def lecturer_logout():
-    session.pop('lecturer_id', None)
-    session.pop('lecturer_name', None)
+    session.clear()
     return redirect(url_for('index'))
 
 @app.route('/lecturer/dashboard')
@@ -474,8 +477,7 @@ def student_login():
 
 @app.route('/student/logout')
 def student_logout():
-    session.pop('student_id', None)
-    session.pop('student_name', None)
+    session.clear()
     return redirect(url_for('index'))
 
 @app.route('/student/change-password', methods=['GET', 'POST'])
